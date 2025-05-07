@@ -40,7 +40,7 @@
         }
       })
 
-      if (username.value=1234) {
+      if (response.data.code === 200) {
         message.value = '登录成功！'
         // 保存 token（可存在 localStorage 或 pinia）
         localStorage.setItem('token', response.data.data.token)
