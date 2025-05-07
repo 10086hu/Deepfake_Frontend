@@ -1,5 +1,8 @@
 <template>
     <div class="page-wrapper">
+      <div class="header">
+      <h1>Deepfake     -     基于LLM的新闻真伪辨别应用</h1> 
+      </div>
       <div class="login-container">
         <h2>用户登录</h2>
         <input v-model="username" type="text" placeholder="用户名" />
@@ -71,6 +74,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+    }
+
+    .header {
+      margin-bottom: 6rem; 
+      text-align: center; 
+      font-size:larger;
+      
     }
 
     .login-container {
@@ -92,7 +103,7 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 0.5rem;
+      margin-top: 1.0rem;
     }
     .register-button:hover {
       background-color: #4caf50;
