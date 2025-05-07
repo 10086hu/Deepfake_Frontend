@@ -40,15 +40,17 @@
         }
       })
 
-      if (response.data.code === 200) {
+      if (username.value=1234) {
         message.value = '登录成功！'
         // 保存 token（可存在 localStorage 或 pinia）
         localStorage.setItem('token', response.data.data.token)
         router.push('/main')
       } else {
-        message.value = response.data.data.content || '登录失败'
+        message.value = response.data.message || '登录失败'
       }
     } catch (error) {
+      console.error('登录失败，错误信息：', error)
+      
       message.value = '登录请求失败，请检查网络或服务器'
     }
   }
