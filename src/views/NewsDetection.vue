@@ -28,12 +28,14 @@
 
 <script setup>
 import { ref } from 'vue'
+import axios from 'axios'
 
 const imageUrl = ref('')
 const textInput = ref('')
 const message = ref('')
 const resultImage = ref('')
 const fileInput = ref(null)
+const selectedFile = ref(null) // 保存上传的文件引用
 
 const triggerImageUpload = () => {
   fileInput.value.click()
@@ -42,6 +44,7 @@ const triggerImageUpload = () => {
 const handleImageUpload = (e) => {
   const file = e.target.files[0]
   if (file) {
+    selectedFile.value = file
     const reader = new FileReader()
     reader.onload = () => {
       imageUrl.value = reader.result
@@ -50,20 +53,43 @@ const handleImageUpload = (e) => {
   }
 }
 
-const handleDetection = () => {
-  if (!imageUrl.value && !textInput.value.trim()) {
+const handleDetection = async () => {
+  if (!selectedFile.value && !textInput.value.trim()) {
     message.value = '请上传图片或输入文字内容'
     return
   }
 
-  message.value = ''
-  
-  // 模拟检测逻辑，这里可以替换为调用后端 API
-  setTimeout(() => {
-    resultImage.value = imageUrl.value || 'https://via.placeholder.com/400x300?text=处理结果'
-  }, 1000)
+  message.value = '正在检测...'
+
+  const formData = new FormData()
+  if (selectedFile.value) {
+    formData.append('image', selectedFile.value)
+  }
+  formData.append('text', textInput.value)
+
+  try {
+    const token = localStorage.getItem('token') || '' // 如果接口需要身份认证
+    const response = await axios.post('http://127.0.0.1:5000/news/detect', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = response.data
+    if (data.code === 200) {
+      message.value = '检测成功'
+      resultImage.value = data.data.result_image_url
+    } else {
+      message.value = data.message || '检测失败'
+    }
+  } catch (error) {
+    message.value = '请求失败，请稍后重试'
+    console.error('检测错误：', error)
+  }
 }
 </script>
+
 
 <style scoped>
 .news-detection {
