@@ -1,8 +1,5 @@
 <template>
   <div class="page-wrapper">
-    <div class="header">
-      <h1>Deepfake     -     基于LLM的新闻真伪辨别应用</h1> 
-    </div>
     <div class="register-container">
     <h2>注册</h2>
     <input v-model="newUsername" placeholder="用户名" />
@@ -10,7 +7,6 @@
     <input type="password" v-model="confirmPassword" placeholder="确认密码" />
     <input v-model="email" placeholder="邮箱" />
     <button @click="handleRegister">注册</button>
-    <button class="return-button" @click="goToLogin">返回</button>
     <p>{{ message }}</p>
   </div>
   </div>
@@ -57,9 +53,6 @@ const handleRegister = async () => {
     message.value = '请求失败，请检查网络或后端服务'
   }
 }
-const goToLogin = () => {
-    router.push('/login')
-  }
 </script>
 
   
@@ -74,15 +67,8 @@ const goToLogin = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
   }
   
-  .header {
-      margin-bottom: 10rem; 
-      text-align: center; 
-      font-size:larger;
-      
-  }
   .register-container {
     width: 300px;
     padding: 2rem;
@@ -91,11 +77,6 @@ const goToLogin = () => {
     background: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-
-  .return-button {
-    background-color: #67c23a;
     align-items: center;
   }
   

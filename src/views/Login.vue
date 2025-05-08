@@ -1,8 +1,5 @@
 <template>
     <div class="page-wrapper">
-      <div class="header">
-      <h1>Deepfake     -     基于LLM的新闻真伪辨别应用</h1> 
-      </div>
       <div class="login-container">
         <h2>用户登录</h2>
         <input v-model="username" type="text" placeholder="用户名" />
@@ -47,6 +44,8 @@
         message.value = '登录成功！'
         // 保存 token（可存在 localStorage 或 pinia）
         localStorage.setItem('token', response.data.data.token)
+        localStorage.setItem('username',username.value)
+        localStorage.setItem('password', password.value)
         router.push('/main')
       } else {
         message.value = response.data.message || '登录失败'
@@ -74,14 +73,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-    }
-
-    .header {
-      margin-bottom: 6rem; 
-      text-align: center; 
-      font-size:larger;
-      
     }
 
     .login-container {
@@ -103,7 +94,7 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      margin-top: 1.0rem;
+      margin-top: 0.5rem;
     }
     .register-button:hover {
       background-color: #4caf50;

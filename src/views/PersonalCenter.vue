@@ -24,14 +24,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
 
-const username = ref('张三')
-const email = ref('zhangsan@example.com')
-const avatarUrl = ref('https://via.placeholder.com/100')
-
-const editableUsername = ref(username.value)
+const username = ref('')
+const editableUsername = ref('')
+const email = ref('')
+const avatarUrl = ref('https://via.placeholder.com/100') // 默认头像
 const fileInput = ref(null)
+const message = ref('')
 
 const triggerAvatarSelect = () => {
   fileInput.value.click()
@@ -48,11 +49,39 @@ const handleAvatarChange = (e) => {
   }
 }
 
+const fetchUserInfo = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await axios.get('http://127.0.0.1:5000/user/info', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    if (response.data.code === 200) {
+      const data = response.data.data
+      username.value = data.username
+      editableUsername.value = data.username
+      email.value = data.email
+      avatarUrl.value = data.avatar_url || 'https://via.placeholder.com/100'
+    } else {
+      message.value = response.data.message || '获取用户信息失败'
+    }
+  } catch (err) {
+    message.value = '请求失败，请稍后重试'
+    console.error('获取用户信息失败', err)
+  }
+}
+
 const saveChanges = () => {
   username.value = editableUsername.value
-  alert('修改已保存（模拟）')
+  alert('修改已保存（前端展示，需实现更新接口）')
 }
+
+onMounted(() => {
+  fetchUserInfo()
+})
 </script>
+
 
 <style scoped>
 .personal-center {
