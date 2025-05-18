@@ -34,7 +34,7 @@
 
 "@element-plus/icons-vue@^2.3.1":
   version "2.3.1"
-  resolved "https://registry.npmmirror.com/@element-plus/icons-vue/-/icons-vue-2.3.1.tgz"
+  resolved "https://registry.yarnpkg.com/@element-plus/icons-vue/-/icons-vue-2.3.1.tgz#1f635ad5fdd5c85ed936481525570e82b5a8307a"
   integrity sha512-XxVUZv48RZAd87ucGS48jPf6pKu0yV5UCg9f4FFwtrYxXOwWuVJo6wOvSLKEoMQKjv8GsX/mhP6UsC1lRwbUWg==
 
 "@esbuild/aix-ppc64@0.25.3":
@@ -486,7 +486,7 @@ dunder-proto@^1.0.1:
 
 element-plus@^2.9.10:
   version "2.9.10"
-  resolved "https://registry.npmmirror.com/element-plus/-/element-plus-2.9.10.tgz"
+  resolved "https://registry.yarnpkg.com/element-plus/-/element-plus-2.9.10.tgz#bde09d18833ffeb68dc5204462c91c640369c988"
   integrity sha512-W2v9jWnm1kl/zm4bSvCh8aFCVlxvhG3fmqiDZwyd6WQiWGE595J/mpjcCggEr+49QDgIymhXrpPMOPPSARUbng==
   dependencies:
     "@ctrl/tinycolor" "^3.4.1"

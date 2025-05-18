@@ -36,9 +36,6 @@
                   </div>
                 </el-upload>
               </div>
-            </el-tab-pane>
-
-            <el-tab-pane label="文本检测" name="text">
               <div class="text-container">
                 <el-input
                   v-model="textInput"
@@ -48,17 +45,6 @@
                   resize="none"
                 />
                 <p class="text-hint">请输入至少100个字的新闻内容以获得更准确的检测结果</p>
-              </div>
-            </el-tab-pane>
-
-            <el-tab-pane label="URL检测" name="url">
-              <div class="url-container">
-                <el-input
-                  v-model="urlInput"
-                  placeholder="请输入新闻文章的URL地址"
-                  prefix-icon="Link"
-                />
-                <p class="url-hint">输入新闻网页的完整URL，系统将自动提取内容进行分析</p>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -229,7 +215,6 @@ const helpDialogVisible = ref(false)
 // 输入内容
 const imageUrl = ref('')
 const textInput = ref('')
-const urlInput = ref('')
 const selectedFile = ref(null)
 const resultImage = ref('')
 
@@ -258,11 +243,11 @@ const detectionResult = ref({
 
 // 计算属性
 const canProceed = computed(() => {
-  if (activeTab.value === 'image') return !!selectedFile.value
-  if (activeTab.value === 'text') return textInput.value.trim().length >= 10
-  if (activeTab.value === 'url') return isValidUrl(urlInput.value)
-  return false
+  const hasValidImage = !!selectedFile.value
+  const hasValidText = textInput.value.trim().length >= 10
+  return hasValidImage && hasValidText
 })
+
 
 const credibilityColor = computed(() => {
   const credibility = detectionResult.value.credibility
@@ -341,51 +326,51 @@ const cancelAnalysis = () => {
 
 const performActualDetection = async () => {
   try {
-    const formData = new FormData()
+    const formData = new FormData();
 
-    if (activeTab.value === 'image' && selectedFile.value) {
-      formData.append('image', selectedFile.value)
-    } else if (activeTab.value === 'text') {
-      formData.append('text', textInput.value)
-    } else if (activeTab.value === 'url') {
-      formData.append('url', urlInput.value)
+    // 添加图片（如果用户上传了）
+    if (selectedFile.value) {
+      formData.append('image', selectedFile.value);
     }
 
-    const token = localStorage.getItem('token') || ''
+    // 添加文本（如果用户输入了）
+    if (textInput.value && textInput.value.trim().length > 0) {
+      formData.append('text', textInput.value.trim());
+    }
 
-    // 实际发送请求到后端
+    const token = localStorage.getItem('token') || '';
+
+    // 发送请求到后端
     try {
       const response = await axios.post('http://127.0.0.1:5000/news/detect', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      const data = response.data
+      const data = response.data;
       if (data.code === 200) {
-        // 如果有真实的API响应，可以使用实际数据
         if (data.data.result_image_url) {
-          resultImage.value = data.data.result_image_url
+          resultImage.value = data.data.result_image_url;
         }
 
-        // 这里可以处理实际的响应数据
-        // 现在使用模拟数据代替
-        generateMockResult()
+        // 处理实际检测结果（或替换为 generateMockResult）
+        generateMockResult();
       } else {
-        ElMessage.error(data.message || '检测失败')
-        activeStep.value = 0
+        ElMessage.error(data.message || '检测失败');
+        activeStep.value = 0;
       }
     } catch (error) {
-      console.error('检测错误：', error)
-      // 如果后端请求失败，使用模拟数据展示界面
-      generateMockResult()
+      console.error('检测错误：', error);
+      generateMockResult();
     }
   } catch (error) {
-    ElMessage.error('处理请求时出错')
-    activeStep.value = 0
+    ElMessage.error('处理请求时出错');
+    activeStep.value = 0;
   }
-}
+};
+
 
 const generateMockResult = () => {
   // 生成模拟的检测结果
