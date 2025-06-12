@@ -344,7 +344,7 @@ const performActualDetection = async () => {
     try {
       const response = await axios.post('http://127.0.0.1:5000/news/detect', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          
           Authorization: `Bearer ${token}`,
         },
       });
