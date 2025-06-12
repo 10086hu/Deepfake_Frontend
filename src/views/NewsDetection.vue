@@ -354,9 +354,23 @@ const performActualDetection = async () => {
         if (data.data.result_image_url) {
           resultImage.value = data.data.result_image_url;
         }
-
+        const credibility = Math.round(parseFloat(data.data.data) * 100);
+        const isReal= credibility>0.5
+        let contentType = '网页新闻'
+        const now = new Date()
+        const timeStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`
+        detectionResult.value = {
+          isReal,
+          score,
+          time: timeStr,
+          contentType,
+          credibility,
+          summary,
+          factors
+        }
+        activeStep.value = 2
         // 处理实际检测结果（或替换为 generateMockResult）
-        generateMockResult();
+        // generateMockResult();
       } else {
         ElMessage.error(data.message || '检测失败');
         activeStep.value = 0;
